@@ -6,20 +6,22 @@ const dbPassword = process.env.MONGODB_PASSWORD;
 const dbName = process.env.MONGODB_DB_NAME;
 
 const uri = `mongodb+srv://${dbUser}:${dbPassword}@${clusterAddress}/?retryWrites=true&w=majority`;
-const client = new MongoClient(uri);
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-console.log('Trying to connect to db');
+async function connectToDatabase() {
+  console.log('Trying to connect to db');
 
-try {
-  await client.connect();
-  await client.db(dbName).command({ ping: 1 });
-  console.log('Connected successfully to server');
-} catch (error) {
-  console.log('Connection failed.');
-  await client.close();
-  console.log('Connection closed.');
+  try {
+    await client.connect();
+    await client.db(dbName).command({ ping: 1 });
+    console.log('Connected successfully to server');
+    return client.db(dbName);
+  } catch (error) {
+    console.log('Connection failed.', error);
+    await client.close();
+    console.log('Connection closed.');
+    throw error;
+  }
 }
 
-const database = client.db(dbName);
-
-export default database;
+export default connectToDatabase;
