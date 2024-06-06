@@ -2,7 +2,7 @@ import { MongoClient } from 'mongodb';
 
 const clusterAddress = process.env.MONGODB_CLUSTER_ADDRESS;
 const dbUser = process.env.MONGODB_USERNAME;
-const dbPassword = process.env.MONGODB_PASSWORD;
+const dbPassword = encodeURIComponent(process.env.MONGODB_PASSWORD);
 const dbName = process.env.MONGODB_DB_NAME;
 
 const uri = `mongodb+srv://${dbUser}:${dbPassword}@${clusterAddress}/${dbName}?retryWrites=true&w=majority`;
@@ -25,4 +25,5 @@ async function connectToDatabase() {
 }
 
 export default connectToDatabase;
+
 

@@ -12,7 +12,6 @@ jobs:
       MONGODB_CLUSTER_ADDRESS: cluster0.gvqyi9h.mongodb.net
       MONGODB_USERNAME: amcculloch
       MONGODB_PASSWORD: Rita#2022
-      MONGODB_DB_NAME: gha-demo
       PORT: 8080
     runs-on: ubuntu-latest
     steps:
@@ -25,6 +24,13 @@ jobs:
           key: npm-deps-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
+      - name: Verify Environment Variables
+        run: |
+          echo "MONGODB_CLUSTER_ADDRESS=${{ env.MONGODB_CLUSTER_ADDRESS }}"
+          echo "MONGODB_USERNAME=${{ env.MONGODB_USERNAME }}"
+          echo "MONGODB_PASSWORD=${{ env.MONGODB_PASSWORD }}"
+          echo "MONGODB_DB_NAME=${{ env.MONGODB_DB_NAME }}"
+          echo "PORT=${{ env.PORT }}"
       - name: Start server and wait for it to be ready
         run: |
           npm start &
