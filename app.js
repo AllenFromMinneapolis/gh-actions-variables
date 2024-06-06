@@ -8,10 +8,16 @@ const app = express();
 async function startServer() {
   try {
     const db = await connectToDatabase();
-    // Pass the db instance to your routes if needed
     app.locals.db = db;
 
     app.use(bodyParser.json());
+
+    // Pass the db instance to the routes
+    app.use((req, res, next) => {
+      req.db = db;
+      next();
+    });
+
     app.use(eventRoutes);
 
     app.listen(process.env.PORT, () => {
@@ -23,4 +29,5 @@ async function startServer() {
 }
 
 startServer();
+
 
