@@ -1,4 +1,4 @@
-name: GHA Containers
+name: GHA Containers.
 on:
   push:
     branches:
